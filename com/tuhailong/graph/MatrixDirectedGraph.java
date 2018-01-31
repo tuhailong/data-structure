@@ -1,16 +1,17 @@
 package com.tuhailong.graph;
 
 /**
- * 无向图的邻接矩阵表示
+ * 有向图的邻接矩阵表示
+ * 
  * @author tuhailong
  */
-public class MatrixUndirectedGraph {
+public class MatrixDirectedGraph {
     // 顶点集合
     private char[] mVertexes;
     // 邻接矩阵
     private int[][] mMatrix;
 
-    MatrixUndirectedGraph(char[] vexs, char[][] edges) {
+    MatrixDirectedGraph(char[] vexs, char[][] edges) {
         // 获取顶点数量
         int vLen = vexs.length;
         // 获取边数量
@@ -32,9 +33,9 @@ public class MatrixUndirectedGraph {
             if (sp == -1 || ep == -1) {
                 continue;
             }
-            // 在无向图中，mMatrix[sp][ep]==1表示顶点mVertexes[sp]与顶点mVertexes[ep]是联通的
+            // 在有向图中，mMatrix[sp][ep]==1表示由顶点mVertexes[sp]起始，
+            // 到顶点mVertexes[ep]终止
             mMatrix[sp][ep] = 1;
-            mMatrix[ep][sp] = 1;
         }
     }
 
@@ -51,7 +52,7 @@ public class MatrixUndirectedGraph {
     }
 
     public void dump() {
-        System.out.printf("Martix Undirected Graph:\n");
+        System.out.printf("Martix Directed Graph:\n");
         System.out.print("    ");
         for (int i = 0; i < mVertexes.length; i++)
             System.out.printf("%c ", mVertexes[i]);
@@ -68,22 +69,23 @@ public class MatrixUndirectedGraph {
 
     public static void main(String[] args) {
         char[] vexs = { 'A', 'B', 'C', 'D', 'E', 'F', 'G' };
-        char[][] edges = new char[][] { { 'A', 'C' }, { 'A', 'D' },{ 'A', 'F' },
-            { 'B', 'C' }, { 'C', 'D' }, { 'E', 'G' }, { 'F', 'G' } };
+        char[][] edges = new char[][] { { 'A', 'B' }, { 'B', 'C' },
+            { 'B', 'E' }, { 'B', 'F' }, { 'C', 'E' }, { 'D', 'C' },
+            { 'E', 'B' }, { 'E', 'D' }, { 'F', 'G' } };
 
-        MatrixUndirectedGraph gragh = new MatrixUndirectedGraph(vexs, edges);
+        MatrixDirectedGraph gragh = new MatrixDirectedGraph(vexs, edges);
         gragh.dump();
         /**
-            Martix Undirected Graph:
+            Martix Directed Graph:
                 A B C D E F G 
             ------------------
-            A | 0 0 1 1 0 1 0 
-            B | 0 0 1 0 0 0 0 
-            C | 1 1 0 1 0 0 0 
-            D | 1 0 1 0 0 0 0 
-            E | 0 0 0 0 0 0 1 
-            F | 1 0 0 0 0 0 1 
-            G | 0 0 0 0 1 1 0 
-        */
+            A | 0 1 0 0 0 0 0 
+            B | 0 0 1 0 1 1 0 
+            C | 0 0 0 0 1 0 0 
+            D | 0 0 1 0 0 0 0 
+            E | 0 1 0 1 0 0 0 
+            F | 0 0 0 0 0 0 1 
+            G | 0 0 0 0 0 0 0
+         */
     }
 }

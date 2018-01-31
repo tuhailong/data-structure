@@ -1,10 +1,10 @@
 package com.tuhailong.graph;
 
 /**
- * 无向图的邻接链表表示
+ * 有向图的邻接链表表示
  * @author tuhailong
  */
-public class ListUndirectedGraph {
+public class ListDirectedGraph {
     // 邻接链表中表对应的链表的结点
     private class EdgeNode {
         // 该边所指向的顶点的位置
@@ -24,7 +24,7 @@ public class ListUndirectedGraph {
     // 顶点集合
     private VertexNode[] mVertexes;
 
-    ListUndirectedGraph(char[] vexs, char[][] edges) {
+    ListDirectedGraph(char[] vexs, char[][] edges) {
         // 顶点数量
         int vLen = vexs.length;
         // 边的数量
@@ -55,16 +55,6 @@ public class ListUndirectedGraph {
             } else {
                 linkLast(mVertexes[sp].firstEdge, sNode);
             }
-
-            // 初始化上sNode
-            EdgeNode eNode = new EdgeNode();
-            eNode.vexIdx = sp;
-            // 将eNode链接到"ep所在链表的末尾"
-            if (mVertexes[ep].firstEdge == null) {
-                mVertexes[ep].firstEdge = eNode;
-            } else {
-                linkLast(mVertexes[ep].firstEdge, eNode);
-            }
         }
     }
 
@@ -92,7 +82,7 @@ public class ListUndirectedGraph {
     }
 
     public void dump() {
-        System.out.printf("List Undirected Graph:\n");
+        System.out.printf("List Directed Graph:\n");
         for (int i = 0; i < mVertexes.length; i++) {
             System.out.printf("%d(%c): ", i, mVertexes[i].info);
             EdgeNode node = mVertexes[i].firstEdge;
@@ -106,20 +96,21 @@ public class ListUndirectedGraph {
 
     public static void main(String[] args) {
         char[] vexs = { 'A', 'B', 'C', 'D', 'E', 'F', 'G' };
-        char[][] edges = new char[][] { { 'A', 'C' }, { 'A', 'D' },{ 'A', 'F' },
-            { 'B', 'C' }, { 'C', 'D' }, { 'E', 'G' }, { 'F', 'G' } };
+        char[][] edges = new char[][] { { 'A', 'B' }, { 'B', 'C' },
+            { 'B', 'E' }, { 'B', 'F' }, { 'C', 'E' }, { 'D', 'C' },
+            { 'E', 'B' }, { 'E', 'D' }, { 'F', 'G' } };
 
-        ListUndirectedGraph gragh = new ListUndirectedGraph(vexs, edges);
+        ListDirectedGraph gragh = new ListDirectedGraph(vexs, edges);
         gragh.dump();
         /**
-            List Undirected Graph:
-            0(A): 2(C) 3(D) 5(F) 
-            1(B): 2(C) 
-            2(C): 0(A) 1(B) 3(D) 
-            3(D): 0(A) 2(C) 
-            4(E): 6(G) 
-            5(F): 0(A) 6(G) 
-            6(G): 4(E) 5(F)
+            List Directed Graph:
+            0(A): 1(B) 
+            1(B): 2(C) 4(E) 5(F) 
+            2(C): 4(E) 
+            3(D): 2(C) 
+            4(E): 1(B) 3(D) 
+            5(F): 6(G) 
+            6(G): 
          */
     }
 }
