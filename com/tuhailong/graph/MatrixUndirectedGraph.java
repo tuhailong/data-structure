@@ -66,6 +66,17 @@ public class MatrixUndirectedGraph {
 
         MatrixUndirectedGraph gragh = new MatrixUndirectedGraph(vexs, edges);
         gragh.dump();
+        /**
+            Martix Undirected Graph:
+                A B C D E F G 
+            ------------------
+            A | 0 0 1 1 0 1 0 
+            B | 0 0 1 0 0 0 0 
+            C | 1 1 0 1 0 0 0 
+            D | 1 0 1 0 0 0 0 
+            E | 0 0 0 0 0 0 1 
+            F | 1 0 0 0 0 0 1 
+            G | 0 0 0 0 1 1 0 
+        */
     }
-
 }
