@@ -143,6 +143,8 @@ public class ListUndirectedGraph {
 
         ListUndirectedGraph gragh = new ListUndirectedGraph(vexs, edges);
         gragh.dump();
+        System.out.println();
+        gragh.dfs();
         /**
             List Undirected Graph:
             0(A): 2(C) 3(D) 5(F) 
