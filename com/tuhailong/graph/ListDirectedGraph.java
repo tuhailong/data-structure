@@ -1,36 +1,36 @@
 package com.tuhailong.graph;
 
 /**
- * ÓĞÏòÍ¼µÄÁÚ½ÓÁ´±í±íÊ¾
+ * æœ‰å‘å›¾çš„é‚»æ¥é“¾è¡¨è¡¨ç¤º
  * @author tuhailong
  */
 public class ListDirectedGraph {
-    // ÁÚ½ÓÁ´±íÖĞ±í¶ÔÓ¦µÄÁ´±íµÄ½áµã
+    // é‚»æ¥é“¾è¡¨ä¸­è¡¨å¯¹åº”çš„é“¾è¡¨çš„ç»“ç‚¹
     private class EdgeNode {
-        // ¸Ã±ßËùÖ¸ÏòµÄ¶¥µãµÄÎ»ÖÃ
+        // è¯¥è¾¹æ‰€æŒ‡å‘çš„é¡¶ç‚¹çš„ä½ç½®
         int vexIdx;
-        // Ö¸ÏòÏÂÒ»Ìõ±ßµÄÖ¸Õë
+        // æŒ‡å‘ä¸‹ä¸€æ¡è¾¹çš„æŒ‡é’ˆ
         EdgeNode nextEdge;
     }
 
-    // ÁÚ½ÓÁ´±íÖĞ±íµÄ¶¥µã
+    // é‚»æ¥é“¾è¡¨ä¸­è¡¨çš„é¡¶ç‚¹
     private class VertexNode {
-        // ¶¥µãĞÅÏ¢
+        // é¡¶ç‚¹ä¿¡æ¯
         char info;
-        // Ö¸ÏòµÚÒ»ÌõÒÀ¸½¸Ã¶¥µãµÄ±ß
+        // æŒ‡å‘ç¬¬ä¸€æ¡ä¾é™„è¯¥é¡¶ç‚¹çš„è¾¹
         EdgeNode firstEdge;
     }
 
-    // ¶¥µã¼¯ºÏ
+    // é¡¶ç‚¹é›†åˆ
     private VertexNode[] mVertexes;
 
     ListDirectedGraph(char[] vexs, char[][] edges) {
-        // ¶¥µãÊıÁ¿
+        // é¡¶ç‚¹æ•°é‡
         int vLen = vexs.length;
-        // ±ßµÄÊıÁ¿
+        // è¾¹çš„æ•°é‡
         int eLen = edges.length;
 
-        // ¶¥µã¸³³õÖµ
+        // é¡¶ç‚¹èµ‹åˆå€¼
         mVertexes = new VertexNode[vLen];
         for (int i = 0; i < vLen; i++) {
             mVertexes[i] = new VertexNode();
@@ -39,17 +39,17 @@ public class ListDirectedGraph {
         }
 
         for (int i = 0; i < eLen; i++) {
-            // ±ßedges[i]µÄÆğÊ¼¶¥µãÔÚmVertexes[i]µÄÎ»ÖÃ
+            // è¾¹edges[i]çš„èµ·å§‹é¡¶ç‚¹åœ¨mVertexes[i]çš„ä½ç½®
             int sp = index(edges[i][0]);
-            // ±ßedges[i]µÄÖÕÖ¹¶¥µãÔÚmVertexes[i]µÄÎ»ÖÃ
+            // è¾¹edges[i]çš„ç»ˆæ­¢é¡¶ç‚¹åœ¨mVertexes[i]çš„ä½ç½®
             int ep = index(edges[i][1]);
             if (sp == -1 || ep == -1) {
                 continue;
             }
-            // ³õÊ¼»¯ÉÏsNode
+            // åˆå§‹åŒ–ä¸ŠsNode
             EdgeNode sNode = new EdgeNode();
             sNode.vexIdx = ep;
-            // ½«sNodeÁ´½Óµ½"spËùÔÚÁ´±íµÄÄ©Î²"
+            // å°†sNodeé“¾æ¥åˆ°"spæ‰€åœ¨é“¾è¡¨çš„æœ«å°¾"
             if (mVertexes[sp].firstEdge == null) {
                 mVertexes[sp].firstEdge = sNode;
             } else {
@@ -59,7 +59,7 @@ public class ListDirectedGraph {
     }
 
     /**
-     * ½«node½ÚµãÁ´½Óµ½listµÄÎ²²¿
+     * å°†nodeèŠ‚ç‚¹é“¾æ¥åˆ°listçš„å°¾éƒ¨
      */
     private void linkLast(EdgeNode list, EdgeNode node) {
         EdgeNode p = list;
@@ -70,7 +70,7 @@ public class ListDirectedGraph {
     }
 
     /**
-     * ·µ»ØchÔÚmVertexesÖĞµÄÎ»ÖÃ
+     * è¿”å›chåœ¨mVertexesä¸­çš„ä½ç½®
      */
     private int index(char ch) {
         for (int i = mVertexes.length - 1; i >= 0; i--) {
@@ -79,6 +79,38 @@ public class ListDirectedGraph {
             }
         }
         return -1;
+    }
+
+    /**
+     * æ·±åº¦ä¼˜å…ˆæœç´¢éå†å›¾çš„é€’å½’å®ç°
+     */
+    private void dfs(int i, boolean[] visited) {
+        visited[i] = true;
+
+        System.out.printf("%c ", mVertexes[i].info);
+        EdgeNode edge = mVertexes[i].firstEdge;
+        while (edge != null) {
+            if (!visited[edge.vexIdx]) {
+                dfs(edge.vexIdx, visited);
+            }
+            edge = edge.nextEdge;
+        }
+    }
+
+    /**
+     * æ·±åº¦ä¼˜å…ˆæœç´¢éå†å›¾
+     */
+    public void dfs() {
+        int vLen = mVertexes.length;
+        boolean[] visited = new boolean[vLen];
+
+        System.out.printf("DFS: ");
+        for (int i = 0; i < vLen; i++) {
+            if (!visited[i]) {
+                dfs(i, visited);
+            }
+        }
+        System.out.printf("\n");
     }
 
     public void dump() {
@@ -102,6 +134,8 @@ public class ListDirectedGraph {
 
         ListDirectedGraph gragh = new ListDirectedGraph(vexs, edges);
         gragh.dump();
+        System.out.println();
+        gragh.dfs();
         /**
             List Directed Graph:
             0(A): 1(B) 
@@ -111,6 +145,8 @@ public class ListDirectedGraph {
             4(E): 1(B) 3(D) 
             5(F): 6(G) 
             6(G): 
+
+            DFS: A B C E D F G 
          */
     }
 }
