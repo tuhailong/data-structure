@@ -113,6 +113,46 @@ public class ListDirectedGraph {
         System.out.printf("\n");
     }
 
+    /**
+     * 广度优先搜索遍历图
+     */
+    public void bfs() {
+        int vLen = mVertexes.length;
+        int head = 0;
+        int rear = 0;
+        // 辅组队列
+        int[] queue = new int[vLen];
+        // 顶点访问标记
+        boolean[] visited = new boolean[vLen];
+
+        System.out.printf("BFS: ");
+        for (int i = 0; i < vLen; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                System.out.printf("%c ", mVertexes[i].info);
+                // 入列
+                queue[rear++] = i;
+            }
+
+            while (head != rear) {
+                // 出列
+                int j = queue[head++];
+                EdgeNode node = mVertexes[j].firstEdge;
+                while (node != null) {
+                    int k = node.vexIdx;
+                    if (!visited[k]) {
+                        visited[k] = true;
+                        System.out.printf("%c ", mVertexes[k].info);
+                        // 入列
+                        queue[rear++] = k;
+                    }
+                    node = node.nextEdge;
+                }
+            }
+        }
+        System.out.printf("\n");
+    }
+
     public void dump() {
         System.out.printf("List Directed Graph:\n");
         for (int i = 0; i < mVertexes.length; i++) {
@@ -136,17 +176,21 @@ public class ListDirectedGraph {
         gragh.dump();
         System.out.println();
         gragh.dfs();
+        System.out.println();
+        gragh.bfs();
         /**
-            List Directed Graph:
-            0(A): 1(B) 
-            1(B): 2(C) 4(E) 5(F) 
-            2(C): 4(E) 
-            3(D): 2(C) 
-            4(E): 1(B) 3(D) 
-            5(F): 6(G) 
-            6(G): 
+        List Directed Graph:
+        0(A): 1(B) 
+        1(B): 2(C) 4(E) 5(F) 
+        2(C): 4(E) 
+        3(D): 2(C) 
+        4(E): 1(B) 3(D) 
+        5(F): 6(G) 
+        6(G): 
 
-            DFS: A B C E D F G 
+        DFS: A B C E D F G 
+
+        BFS: A B C E F D G 
          */
     }
 }

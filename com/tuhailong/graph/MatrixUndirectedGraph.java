@@ -1,46 +1,46 @@
 package com.tuhailong.graph;
 
 /**
- * ÎŞÏòÍ¼µÄÁÚ½Ó¾ØÕó±íÊ¾
+ * æ— å‘å›¾çš„é‚»æ¥çŸ©é˜µè¡¨ç¤º
  * 
  * @author tuhailong
  */
 public class MatrixUndirectedGraph {
-    // ¶¥µã¼¯ºÏ
+    // é¡¶ç‚¹é›†åˆ
     private char[] mVertexes;
-    // ÁÚ½Ó¾ØÕó
+    // é‚»æ¥çŸ©é˜µ
     private int[][] mMatrix;
 
     MatrixUndirectedGraph(char[] vexs, char[][] edges) {
-        // »ñÈ¡¶¥µãÊıÁ¿
+        // è·å–é¡¶ç‚¹æ•°é‡
         int vLen = vexs.length;
-        // »ñÈ¡±ßÊıÁ¿
+        // è·å–è¾¹æ•°é‡
         int eLen = edges.length;
 
-        // ¶¥µã¸³Öµ
+        // é¡¶ç‚¹èµ‹å€¼
         mVertexes = new char[vLen];
         for (int i = 0; i < vLen; i++) {
             mVertexes[i] = vexs[i];
         }
 
-        // ±ß¸³³õÊ¼Öµ
+        // è¾¹èµ‹åˆå§‹å€¼
         mMatrix = new int[vLen][vLen];
         for (int i = 0; i < eLen; i++) {
-            // ±ßedges[i]µÄÆğÊ¼¶¥µã
+            // è¾¹edges[i]çš„èµ·å§‹é¡¶ç‚¹
             int sp = index(edges[i][0]);
-            // ±ßedges[i]µÄÖÕÖ¹¶¥µã
+            // è¾¹edges[i]çš„ç»ˆæ­¢é¡¶ç‚¹
             int ep = index(edges[i][1]);
             if (sp == -1 || ep == -1) {
                 continue;
             }
-            // ÔÚÎŞÏòÍ¼ÖĞ£¬mMatrix[sp][ep]==1±íÊ¾¶¥µãmVertexes[sp]Óë¶¥µãmVertexes[ep]ÊÇÁªÍ¨µÄ
+            // åœ¨æ— å‘å›¾ä¸­ï¼ŒmMatrix[sp][ep]==1è¡¨ç¤ºé¡¶ç‚¹mVertexes[sp]ä¸é¡¶ç‚¹mVertexes[ep]æ˜¯è”é€šçš„
             mMatrix[sp][ep] = 1;
             mMatrix[ep][sp] = 1;
         }
     }
 
     /**
-     * ·µ»ØchÔÚmVertexesÖĞµÄÎ»ÖÃ
+     * è¿”å›chåœ¨mVertexesä¸­çš„ä½ç½®
      */
     private int index(char ch) {
         for (int i = mVertexes.length - 1; i >= 0; i--) {
@@ -52,7 +52,7 @@ public class MatrixUndirectedGraph {
     }
 
     /**
-     * ·µ»Ø¶¥µãvµÄµÚÒ»¸öÁÚ½Ó¶¥µãµÄË÷Òı£¬Ê§°ÜÔò·µ»Ø-1
+     * è¿”å›é¡¶ç‚¹vçš„ç¬¬ä¸€ä¸ªé‚»æ¥é¡¶ç‚¹çš„ç´¢å¼•ï¼Œå¤±è´¥åˆ™è¿”å›-1
      */
     private int firstVertex(int v) {
         if (v < 0 || v > mVertexes.length - 1) {
@@ -67,7 +67,7 @@ public class MatrixUndirectedGraph {
     }
 
     /**
-     * ·µ»Ø¶¥µãvÏà¶ÔÓÚwµÄÏÂÒ»¸öÁÚ½Ó¶¥µãµÄË÷Òı£¬Ê§°ÜÔò·µ»Ø-1
+     * è¿”å›é¡¶ç‚¹vç›¸å¯¹äºwçš„ä¸‹ä¸€ä¸ªé‚»æ¥é¡¶ç‚¹çš„ç´¢å¼•ï¼Œå¤±è´¥åˆ™è¿”å›-1
      */
     private int nextVertex(int v, int w) {
         if (v < 0 || v > mVertexes.length - 1) {
@@ -85,12 +85,12 @@ public class MatrixUndirectedGraph {
     }
 
     /**
-     * Éî¶ÈÓÅÏÈËÑË÷±éÀúÍ¼µÄµİ¹éÊµÏÖ
+     * æ·±åº¦ä¼˜å…ˆæœç´¢éå†å›¾çš„é€’å½’å®ç°
      */
     private void dfs(int i, boolean[] visited) {
         visited[i] = true;
         System.out.printf("%c ", mVertexes[i]);
-        // ±éÀú¸Ã¶¥µãµÄËùÓĞÁÚ½Ó¶¥µã:ÈôÊÇÃ»ÓĞ·ÃÎÊ¹ı,ÄÇÃ´¼ÌĞøÍùÏÂ×ß
+        // éå†è¯¥é¡¶ç‚¹çš„æ‰€æœ‰é‚»æ¥é¡¶ç‚¹:è‹¥æ˜¯æ²¡æœ‰è®¿é—®è¿‡,é‚£ä¹ˆç»§ç»­å¾€ä¸‹èµ°
         for (int w = firstVertex(i); w >= 0; w = nextVertex(i, w)) {
             if (!visited[w]) {
                 dfs(w, visited);
@@ -99,7 +99,7 @@ public class MatrixUndirectedGraph {
     }
 
     /**
-     * Éî¶ÈÓÅÏÈËÑË÷±éÀúÍ¼
+     * æ·±åº¦ä¼˜å…ˆæœç´¢éå†å›¾
      */
     public void dfs() {
         int vLen = mVertexes.length;
@@ -112,6 +112,44 @@ public class MatrixUndirectedGraph {
         for (int i = 0; i < vLen; i++) {
             if (!visited[i]) {
                 dfs(i, visited);
+            }
+        }
+        System.out.printf("\n");
+    }
+
+    /**
+     * å¹¿åº¦ä¼˜å…ˆæœç´¢éå†å›¾
+     */
+    public void bfs() {
+        int vLen = mVertexes.length;
+        int head = 0;
+        int rear = 0;
+        // è¾…ç»„é˜Ÿåˆ—
+        int[] queue = new int[vLen];
+        // é¡¶ç‚¹è®¿é—®æ ‡è®°
+        boolean[] visited = new boolean[vLen];
+
+        System.out.printf("BFS: ");
+        for (int i = 0; i < vLen; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                System.out.printf("%c ", mVertexes[i]);
+                // å…¥åˆ—
+                queue[rear++] = i;
+            }
+
+            while (head != rear) {
+                // å‡ºåˆ—
+                int j = queue[head++];
+                //kä¸ºè®¿é—®çš„é‚»æ¥é¡¶ç‚¹
+                for (int k = firstVertex(j); k >= 0; k = nextVertex(j, k)) {
+                    if (!visited[k]) {
+                        visited[k] = true;
+                        System.out.printf("%c ", mVertexes[k]);
+                        // å…¥åˆ—
+                        queue[rear++] = k;
+                    }
+                }
             }
         }
         System.out.printf("\n");
@@ -142,19 +180,23 @@ public class MatrixUndirectedGraph {
         graph.dump();
         System.out.println();
         graph.dfs();
+        System.out.println();
+        graph.bfs();
         /**
-            Martix Undirected Graph:
-                A B C D E F G 
-            ------------------
-            A | 0 0 1 1 0 1 0 
-            B | 0 0 1 0 0 0 0 
-            C | 1 1 0 1 0 0 0 
-            D | 1 0 1 0 0 0 0 
-            E | 0 0 0 0 0 0 1 
-            F | 1 0 0 0 0 0 1 
-            G | 0 0 0 0 1 1 0 
+        Martix Undirected Graph:
+            A B C D E F G 
+        ------------------
+        A | 0 0 1 1 0 1 0 
+        B | 0 0 1 0 0 0 0 
+        C | 1 1 0 1 0 0 0 
+        D | 1 0 1 0 0 0 0 
+        E | 0 0 0 0 0 0 1 
+        F | 1 0 0 0 0 0 1 
+        G | 0 0 0 0 1 1 0 
 
-            DFS: A C B D F G E 
+        DFS: A C B D F G E 
+
+        BFS: A C D F B G E 
         */
     }
 }

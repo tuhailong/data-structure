@@ -118,7 +118,45 @@ public class MatrixDirectedGraph {
         }
         System.out.printf("\n");
     }
-    
+
+    /**
+     * 广度优先搜索遍历图
+     */
+    public void bfs() {
+        int vLen = mVertexes.length;
+        int head = 0;
+        int rear = 0;
+        // 辅组队列
+        int[] queue = new int[vLen];
+        // 顶点访问标记
+        boolean[] visited = new boolean[vLen];
+
+        System.out.printf("BFS: ");
+        for (int i = 0; i < vLen; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                System.out.printf("%c ", mVertexes[i]);
+                // 入列
+                queue[rear++] = i;
+            }
+
+            while (head != rear) {
+                // 出列
+                int j = queue[head++];
+                //k为访问的邻接顶点
+                for (int k = firstVertex(j); k >= 0; k = nextVertex(j, k)) {
+                    if (!visited[k]) {
+                        visited[k] = true;
+                        System.out.printf("%c ", mVertexes[k]);
+                        // 入列
+                        queue[rear++] = k;
+                    }
+                }
+            }
+        }
+        System.out.printf("\n");
+    }
+
     public void dump() {
         System.out.printf("Martix Directed Graph:\n");
         System.out.print("    ");
@@ -141,21 +179,27 @@ public class MatrixDirectedGraph {
             { 'B', 'E' }, { 'B', 'F' }, { 'C', 'E' }, { 'D', 'C' },
             { 'E', 'B' }, { 'E', 'D' }, { 'F', 'G' } };
 
-        MatrixDirectedGraph gragh = new MatrixDirectedGraph(vexs, edges);
-        gragh.dump();
+        MatrixDirectedGraph graph = new MatrixDirectedGraph(vexs, edges);
+        graph.dump();
+        System.out.println();
+        graph.dfs();
+        System.out.println();
+        graph.bfs();
         /**
-            Martix Directed Graph:
-                A B C D E F G 
-            ------------------
-            A | 0 1 0 0 0 0 0 
-            B | 0 0 1 0 1 1 0 
-            C | 0 0 0 0 1 0 0 
-            D | 0 0 1 0 0 0 0 
-            E | 0 1 0 1 0 0 0 
-            F | 0 0 0 0 0 0 1 
-            G | 0 0 0 0 0 0 0
+        Martix Directed Graph:
+            A B C D E F G 
+        ------------------
+        A | 0 1 0 0 0 0 0 
+        B | 0 0 1 0 1 1 0 
+        C | 0 0 0 0 1 0 0 
+        D | 0 0 1 0 0 0 0 
+        E | 0 1 0 1 0 0 0 
+        F | 0 0 0 0 0 0 1 
+        G | 0 0 0 0 0 0 0 
 
-            DFS: A B C E D F G 
+        DFS: A B C E D F G 
+
+        BFS: A B C E F D G
          */
     }
 }
