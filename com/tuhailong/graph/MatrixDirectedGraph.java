@@ -5,20 +5,21 @@ package com.tuhailong.graph;
  * 
  * @author tuhailong
  */
-public class MatrixDirectedGraph {
-    // 顶点集合
-    private char[] mVertexes;
+public class MatrixDirectedGraph<T> {
+    // 顶点数组
+    private T[] mVertexes;
     // 邻接矩阵
     private int[][] mMatrix;
 
-    MatrixDirectedGraph(char[] vexs, char[][] edges) {
+    @SuppressWarnings("unchecked")
+    MatrixDirectedGraph(T[] vexs, T[][] edges) {
         // 获取顶点数量
         int vLen = vexs.length;
         // 获取边数量
         int eLen = edges.length;
 
         // 顶点赋值
-        mVertexes = new char[vLen];
+        mVertexes = (T[])new Object[vLen];
         for (int i = 0; i < vLen; i++) {
             mVertexes[i] = vexs[i];
         }
@@ -40,11 +41,11 @@ public class MatrixDirectedGraph {
     }
 
     /**
-     * 返回ch在mVertexes中的位置
+     * 返回item在mVertexes中的位置
      */
-    private int index(char ch) {
+    private int index(T item) {
         for (int i = mVertexes.length - 1; i >= 0; i--) {
-            if (ch == mVertexes[i]) {
+            if (item == mVertexes[i]) {
                 return i;
             }
         }
@@ -174,12 +175,12 @@ public class MatrixDirectedGraph {
     }
 
     public static void main(String[] args) {
-        char[] vexs = { 'A', 'B', 'C', 'D', 'E', 'F', 'G' };
-        char[][] edges = new char[][] { { 'A', 'B' }, { 'B', 'C' },
+        Character[] vexs = { 'A', 'B', 'C', 'D', 'E', 'F', 'G' };
+        Character[][] edges = new Character[][] { { 'A', 'B' }, { 'B', 'C' },
             { 'B', 'E' }, { 'B', 'F' }, { 'C', 'E' }, { 'D', 'C' },
             { 'E', 'B' }, { 'E', 'D' }, { 'F', 'G' } };
 
-        MatrixDirectedGraph graph = new MatrixDirectedGraph(vexs, edges);
+        MatrixDirectedGraph<Character> graph = new MatrixDirectedGraph<Character>(vexs, edges);
         graph.dump();
         System.out.println();
         graph.dfs();

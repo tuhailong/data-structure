@@ -4,36 +4,38 @@ package com.tuhailong.graph;
  * 无向图的邻接链表表示
  * @author tuhailong
  */
-public class ListUndirectedGraph {
-    // 邻接链表中表对应的链表的结点
-    private class EdgeNode {
-        // 该边所指向的顶点的位置
+public class ListUndirectedGraph<T> {
+
+    // 顶点
+    private class VertexNode<E> {
+        // 顶点信息
+        E info;
+        // 指向第一条依附该顶点的边
+        AdjacentNode firstEdge;
+    }
+
+    // 顶点对应的邻接表的结点
+    private class AdjacentNode {
+        // 该边的对端顶点在顶点数组中的位置
         int vexIdx;
         // 指向下一条边的指针
-        EdgeNode nextEdge;
+        AdjacentNode nextEdge;
     }
 
-    // 邻接链表中表的顶点
-    private class VertexNode {
-        // 顶点信息
-        char info;
-        // 指向第一条依附该顶点的边
-        EdgeNode firstEdge;
-    }
+    // 顶点数组
+    private VertexNode<T>[] mVertexes;
 
-    // 顶点集合
-    private VertexNode[] mVertexes;
-
-    ListUndirectedGraph(char[] vexs, char[][] edges) {
+    @SuppressWarnings("unchecked")
+    ListUndirectedGraph(T[] vexs, T[][] edges) {
         // 顶点数量
         int vLen = vexs.length;
         // 边的数量
         int eLen = edges.length;
 
         // 顶点赋初值
-        mVertexes = new VertexNode[vLen];
+        mVertexes = (VertexNode<T>[])new VertexNode[vLen];
         for (int i = 0; i < vLen; i++) {
-            mVertexes[i] = new VertexNode();
+            mVertexes[i] = new VertexNode<T>();
             mVertexes[i].info = vexs[i];
             mVertexes[i].firstEdge = null;
         }
@@ -47,9 +49,9 @@ public class ListUndirectedGraph {
                 continue;
             }
             // 初始化上sNode
-            EdgeNode sNode = new EdgeNode();
+            AdjacentNode sNode = new AdjacentNode();
             sNode.vexIdx = ep;
-            // 将sNode链接到"sp所在链表的末尾"
+            // 将sNode链接到"顶点sp所指向的链表的末尾"
             if (mVertexes[sp].firstEdge == null) {
                 mVertexes[sp].firstEdge = sNode;
             } else {
@@ -57,9 +59,9 @@ public class ListUndirectedGraph {
             }
 
             // 初始化上sNode
-            EdgeNode eNode = new EdgeNode();
+            AdjacentNode eNode = new AdjacentNode();
             eNode.vexIdx = sp;
-            // 将eNode链接到"ep所在链表的末尾"
+            // 将eNode链接到"顶点ep所指向的链表的末尾"
             if (mVertexes[ep].firstEdge == null) {
                 mVertexes[ep].firstEdge = eNode;
             } else {
@@ -71,8 +73,8 @@ public class ListUndirectedGraph {
     /**
      * 将node节点链接到list的尾部
      */
-    private void linkLast(EdgeNode list, EdgeNode node) {
-        EdgeNode p = list;
+    private void linkLast(AdjacentNode list, AdjacentNode node) {
+        AdjacentNode p = list;
         while (p.nextEdge != null) {
             p = p.nextEdge;
         }
@@ -80,11 +82,11 @@ public class ListUndirectedGraph {
     }
 
     /**
-     * 返回ch在mVertexes中的位置
+     * 返回item在mVertexes中的位置
      */
-    private int index(char ch) {
+    private int index(T item) {
         for (int i = mVertexes.length - 1; i >= 0; i--) {
-            if (ch == mVertexes[i].info) {
+            if (item == mVertexes[i].info) {
                 return i;
             }
         }
@@ -98,7 +100,7 @@ public class ListUndirectedGraph {
         visited[i] = true;
 
         System.out.printf("%c ", mVertexes[i].info);
-        EdgeNode edge = mVertexes[i].firstEdge;
+        AdjacentNode edge = mVertexes[i].firstEdge;
         while (edge != null) {
             if (!visited[edge.vexIdx]) {
                 dfs(edge.vexIdx, visited);
@@ -147,7 +149,7 @@ public class ListUndirectedGraph {
             while (head != rear) {
                 // 出列
                 int j = queue[head++];
-                EdgeNode node = mVertexes[j].firstEdge;
+                AdjacentNode node = mVertexes[j].firstEdge;
                 while (node != null) {
                     int k = node.vexIdx;
                     if (!visited[k]) {
@@ -167,7 +169,7 @@ public class ListUndirectedGraph {
         System.out.printf("List Undirected Graph:\n");
         for (int i = 0; i < mVertexes.length; i++) {
             System.out.printf("%d(%c): ", i, mVertexes[i].info);
-            EdgeNode node = mVertexes[i].firstEdge;
+            AdjacentNode node = mVertexes[i].firstEdge;
             while (node != null) {
                 System.out.printf("%d(%c) ", node.vexIdx, mVertexes[node.vexIdx].info);
                 node = node.nextEdge;
@@ -177,11 +179,11 @@ public class ListUndirectedGraph {
     }
 
     public static void main(String[] args) {
-        char[] vexs = { 'A', 'B', 'C', 'D', 'E', 'F', 'G' };
-        char[][] edges = new char[][] { { 'A', 'C' }, { 'A', 'D' },{ 'A', 'F' },
+        Character[] vexs = { 'A', 'B', 'C', 'D', 'E', 'F', 'G' };
+        Character[][] edges = new Character[][] { { 'A', 'C' }, { 'A', 'D' },{ 'A', 'F' },
             { 'B', 'C' }, { 'C', 'D' }, { 'E', 'G' }, { 'F', 'G' } };
 
-        ListUndirectedGraph gragh = new ListUndirectedGraph(vexs, edges);
+        ListUndirectedGraph<Character> gragh = new ListUndirectedGraph<Character>(vexs, edges);
         gragh.dump();
         System.out.println();
         gragh.dfs();
