@@ -1,5 +1,7 @@
 package com.tuhailong.graph;
 
+import java.util.ArrayList;
+
 /**
  * 有向图的邻接矩阵表示
  * 
@@ -90,13 +92,13 @@ public class MatrixDirectedGraph<T> {
     /**
      * 深度优先搜索遍历图的递归实现
      */
-    private void dfs(int i, boolean[] visited) {
+    private void dfs(boolean[] visited, int i, ArrayList<T> list) {
         visited[i] = true;
-        System.out.printf("%c ", mVertexes[i]);
+        list.add(mVertexes[i]);
         // 遍历该顶点的所有邻接顶点:若是没有访问过,那么继续往下走
         for (int w = firstVertex(i); w >= 0; w = nextVertex(i, w)) {
             if (!visited[w]) {
-                dfs(w, visited);
+                dfs(visited, w, list);
             }
         }
     }
@@ -104,26 +106,29 @@ public class MatrixDirectedGraph<T> {
     /**
      * 深度优先搜索遍历图
      */
-    public void dfs() {
+    @SuppressWarnings("unchecked")
+    public T[] dfs() {
+        ArrayList<T> list = new ArrayList<>();
+
         int vLen = mVertexes.length;
         boolean[] visited = new boolean[vLen];
         for (int i = 0; i < vLen; i++) {
-            visited[i] = false;
-        }
-
-        System.out.printf("DFS: ");
-        for (int i = 0; i < vLen; i++) {
             if (!visited[i]) {
-                dfs(i, visited);
+                dfs(visited, i, list);
             }
         }
-        System.out.printf("\n");
+
+        System.out.println("DFS: " + list.toString());
+        return (T[])list.toArray();
     }
 
     /**
      * 广度优先搜索遍历图
      */
-    public void bfs() {
+    @SuppressWarnings("unchecked")
+    public T[] bfs() {
+        ArrayList<T> list = new ArrayList<>();
+
         int vLen = mVertexes.length;
         int head = 0;
         int rear = 0;
@@ -132,11 +137,10 @@ public class MatrixDirectedGraph<T> {
         // 顶点访问标记
         boolean[] visited = new boolean[vLen];
 
-        System.out.printf("BFS: ");
         for (int i = 0; i < vLen; i++) {
             if (!visited[i]) {
                 visited[i] = true;
-                System.out.printf("%c ", mVertexes[i]);
+                list.add(mVertexes[i]);
                 // 入列
                 queue[rear++] = i;
             }
@@ -148,14 +152,16 @@ public class MatrixDirectedGraph<T> {
                 for (int k = firstVertex(j); k >= 0; k = nextVertex(j, k)) {
                     if (!visited[k]) {
                         visited[k] = true;
-                        System.out.printf("%c ", mVertexes[k]);
+                        list.add(mVertexes[k]);
                         // 入列
                         queue[rear++] = k;
                     }
                 }
             }
         }
-        System.out.printf("\n");
+
+        System.out.println("BFS: " + list.toString());
+        return (T[])list.toArray();
     }
 
     public void dump() {
@@ -182,9 +188,7 @@ public class MatrixDirectedGraph<T> {
 
         MatrixDirectedGraph<Character> graph = new MatrixDirectedGraph<Character>(vexs, edges);
         graph.dump();
-        System.out.println();
         graph.dfs();
-        System.out.println();
         graph.bfs();
         /**
         Martix Directed Graph:
@@ -197,10 +201,8 @@ public class MatrixDirectedGraph<T> {
         E | 0 1 0 1 0 0 0 
         F | 0 0 0 0 0 0 1 
         G | 0 0 0 0 0 0 0 
-
-        DFS: A B C E D F G 
-
-        BFS: A B C E F D G
+        DFS: [A, B, C, E, D, F, G]
+        BFS: [A, B, C, E, F, D, G]
          */
     }
 }

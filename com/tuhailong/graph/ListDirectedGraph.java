@@ -1,5 +1,7 @@
 package com.tuhailong.graph;
 
+import java.util.ArrayList;
+
 /**
  * 有向图的邻接链表表示
  * @author tuhailong
@@ -86,14 +88,14 @@ public class ListDirectedGraph<T> {
     /**
      * 深度优先搜索遍历图的递归实现
      */
-    private void dfs(int i, boolean[] visited) {
+    private void dfs(boolean[] visited, int i, ArrayList<T> list) {
         visited[i] = true;
+        list.add(mVertexes[i].info);
 
-        System.out.printf("%c ", mVertexes[i].info);
         AdjacentNode edge = mVertexes[i].firstEdge;
         while (edge != null) {
             if (!visited[edge.vexIdx]) {
-                dfs(edge.vexIdx, visited);
+                dfs(visited, edge.vexIdx, list);
             }
             edge = edge.nextEdge;
         }
@@ -102,23 +104,30 @@ public class ListDirectedGraph<T> {
     /**
      * 深度优先搜索遍历图
      */
-    public void dfs() {
+    @SuppressWarnings("unchecked")
+    public T[] dfs() {
+        ArrayList<T> list = new ArrayList<>();
+
         int vLen = mVertexes.length;
         boolean[] visited = new boolean[vLen];
 
-        System.out.printf("DFS: ");
         for (int i = 0; i < vLen; i++) {
             if (!visited[i]) {
-                dfs(i, visited);
+                dfs(visited, i, list);
             }
         }
-        System.out.printf("\n");
+
+        System.out.println("DFS: " + list.toString());
+        return (T[])list.toArray();
     }
 
     /**
      * 广度优先搜索遍历图
      */
-    public void bfs() {
+    @SuppressWarnings("unchecked")
+    public T[] bfs() {
+        ArrayList<T> list = new ArrayList<>();
+
         int vLen = mVertexes.length;
         int head = 0;
         int rear = 0;
@@ -127,15 +136,13 @@ public class ListDirectedGraph<T> {
         // 顶点访问标记
         boolean[] visited = new boolean[vLen];
 
-        System.out.printf("BFS: ");
         for (int i = 0; i < vLen; i++) {
             if (!visited[i]) {
                 visited[i] = true;
-                System.out.printf("%c ", mVertexes[i].info);
+                list.add(mVertexes[i].info);
                 // 入列
                 queue[rear++] = i;
             }
-
             while (head != rear) {
                 // 出列
                 int j = queue[head++];
@@ -144,7 +151,7 @@ public class ListDirectedGraph<T> {
                     int k = node.vexIdx;
                     if (!visited[k]) {
                         visited[k] = true;
-                        System.out.printf("%c ", mVertexes[k].info);
+                        list.add(mVertexes[k].info);
                         // 入列
                         queue[rear++] = k;
                     }
@@ -152,7 +159,9 @@ public class ListDirectedGraph<T> {
                 }
             }
         }
-        System.out.printf("\n");
+
+        System.out.println("BFS: " + list.toString());
+        return (T[])list.toArray();
     }
 
     public void dump() {
@@ -174,12 +183,10 @@ public class ListDirectedGraph<T> {
             { 'B', 'E' }, { 'B', 'F' }, { 'C', 'E' }, { 'D', 'C' },
             { 'E', 'B' }, { 'E', 'D' }, { 'F', 'G' } };
 
-        ListDirectedGraph<Character> gragh = new ListDirectedGraph<Character>(vexs, edges);
-        gragh.dump();
-        System.out.println();
-        gragh.dfs();
-        System.out.println();
-        gragh.bfs();
+        ListDirectedGraph<Character> graph = new ListDirectedGraph<Character>(vexs, edges);
+        graph.dump();
+        graph.dfs();
+        graph.bfs();
         /**
         List Directed Graph:
         0(A): 1(B) 
@@ -189,10 +196,8 @@ public class ListDirectedGraph<T> {
         4(E): 1(B) 3(D) 
         5(F): 6(G) 
         6(G): 
-
-        DFS: A B C E D F G 
-
-        BFS: A B C E F D G 
+        DFS: [A, B, C, E, D, F, G]
+        BFS: [A, B, C, E, F, D, G]
          */
     }
 }
