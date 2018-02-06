@@ -226,6 +226,41 @@ public class DirectedGraph<T> {
     }
 
     /**
+     * 判断无向图是否有环
+     */
+    public boolean hasCycle() {
+        boolean[] hasCycle = new boolean[1];
+        int vLen = mVertexes.length;
+        boolean[] visited = new boolean[vLen];
+        for (int i = 0; i < vLen; i++) {
+            if (!visited[i]) {
+                // 1.刚开始没有顶点被访问过，当前正访问和上一个被访问的顶点都设置为起点i;
+                // 2.当dfsForCycle被递归调用一次后，当前正访问的参数v是i的一个邻接点，而上一个被访问的参数u是i.
+                dfsForCycle(visited, i, i, hasCycle);
+            }
+        }
+        return hasCycle[0];
+    }
+
+    // v表示当前正访问的顶点，u表示上一个访问的顶点
+    private void dfsForCycle(boolean[] visited, int v, int u, boolean[] hasCycle) {
+        // 设置(顶点数组中序号为v的顶点)顶点v的已访问标记
+        visited[v] = true;
+        // 遍历(顶点数组中序号为v的顶点)顶点v的所有邻接顶点
+        AdjacentNode node = mVertexes[v].firstEdge;
+        while (node != null) {
+            int w = node.vexIdx;
+            if (!visited[w]) {
+                dfsForCycle(visited, w, v, hasCycle);
+            } else if (w != u) {
+                hasCycle[0] = true;
+                return;
+            }
+            node = node.nextEdge;
+        }
+    }
+
+    /**
      * 获取当前有向图的反向图
      */
     public DirectedGraph<T> reverse() {
@@ -267,7 +302,7 @@ public class DirectedGraph<T> {
  2. DFS的逆后序遍历:
  (1)若当前顶点未访问,先遍历完与当前顶点邻接且未被访问的所有其它顶点
  (2)将当前顶点加入栈中,最后栈中从栈顶到栈底的顺序就是我们需要的顶点顺序。
-****************************************************************************************************************/
+ ****************************************************************************************************************/
     public static class StronglyConnectedComponent<T> {
         private DirectedGraph<T> mGraph;
 
@@ -368,6 +403,7 @@ public class DirectedGraph<T> {
         graph.dump();
         graph.dfs();
         graph.bfs();
+        System.out.println("current graph does " + (graph.hasCycle() ? "" : "not ") + "have cycle");
         System.out.println();
 
         StronglyConnectedComponent<Character> scc = new StronglyConnectedComponent<>(graph);
@@ -378,7 +414,6 @@ public class DirectedGraph<T> {
             chs[i] = graph.vertexInfo(idxes[i]);
         }
         System.out.println("all strongly connected vertexes for vertex B in current directed graph are " + (Arrays.toString(chs)));
-
         /**
         List Directed Graph:
         0(A): 1(B) 
@@ -390,9 +425,10 @@ public class DirectedGraph<T> {
         6(G): 
         DFS: [A, B, C, E, D, F, G]
         BFS: [A, B, C, E, F, D, G]
+        current graph does have cycle
 
         numder of the strongly connected component in current directed graph is 4
-        all strongly connected vertexes for vertex B are [B, C, D, E]
+        all strongly connected vertexes for vertex B in current directed graph are [B, C, D, E]
          */
     }
 }
