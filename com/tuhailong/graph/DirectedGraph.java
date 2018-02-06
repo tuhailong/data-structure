@@ -264,19 +264,19 @@ public class DirectedGraph<T> {
  1. 需要保证被指向的强连通分量的至少一个顶点排在该连通分量的所有顶点前面,Kosaraju给出的解决办法:
  (1)对原图取反;
  (2)从反向图的任意节点开始, 进行DFS的逆后序遍历, 逆后序得到的顺序一定满足我们的要求.
- DFS的逆后序遍历:如果当前顶点未访问,先遍历完与当前顶点邻接的且未被访问的所有其它顶点,然后将当前顶点加入栈中,最后栈中从栈顶到栈底的顺序就是我们需要的顶点顺序。
+ DFS的逆后序遍历:如果当前顶点未访问,先遍历完与当前顶点邻接且未被访问的所有其它顶点,然后将当前顶点加入栈中,最后栈中从栈顶到栈底的顺序就是我们需要的顶点顺序。
  ****************************************************************************************************************/
-    public static class ConnectedComponent<T> {
+    public static class StronglyConnectedComponent<T> {
         private DirectedGraph<T> mGraph;
 
         // 标识顶点是否已经被访问过
         private boolean[] mVisited;
-        // 给每个顶点标识一个id，id相同的顶点构成一个联通分量
+        // 给每个顶点标识一个id，id相同的顶点构成一个强连通分量
         private int[] mIds;
-        // 连通分量的个数
+        // 强连通分量的个数
         private int mCount;
 
-        public ConnectedComponent(DirectedGraph<T> graph) {
+        public StronglyConnectedComponent(DirectedGraph<T> graph) {
             this.mGraph = graph;
 
             int vLen = graph.vertexSize();
@@ -336,7 +336,7 @@ public class DirectedGraph<T> {
         }
 
         /**
-         * 获取顶点数组中序号为v的顶点的所有临界点的序号集合
+         * 获取顶点数组中序号为v的顶点的所有邻接点的序号
          */
         public int[] allConnected(int v){
             ArrayList<Integer> list = new ArrayList<>();
@@ -368,9 +368,9 @@ public class DirectedGraph<T> {
         graph.bfs();
         System.out.println();
 
-        ConnectedComponent<Character> cc = new ConnectedComponent<>(graph);
-        System.out.println("numder of the strongly connected component in current directed graph is " + (cc.count()));
-        int[] idxes = cc.allConnected(graph.index('B'));
+        StronglyConnectedComponent<Character> scc = new StronglyConnectedComponent<>(graph);
+        System.out.println("numder of the strongly connected component in current directed graph is " + (scc.count()));
+        int[] idxes = scc.allConnected(graph.index('B'));
         Character[] chs = new Character[idxes.length];
         for (int i = 0 ; i < idxes.length; i++) {
             chs[i] = graph.vertexInfo(idxes[i]);
