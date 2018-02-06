@@ -226,7 +226,7 @@ public class DirectedGraph<T> {
     }
 
     /**
-     * 判断无向图是否有环
+     * 判断有向图是否有环
      */
     public boolean hasCycle() {
         boolean[] hasCycle = new boolean[1];
